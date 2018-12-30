@@ -4,7 +4,6 @@ public class DireccionIP {
 
     public static final int LONGITUD_IP=4;
     private final int[] direccionIP = new int[LONGITUD_IP];
-    private char clase;
     private String direccionIPTexto;
 
 
@@ -39,6 +38,21 @@ public class DireccionIP {
             }
         }
         return direccionIP;
+    }
+
+    public String categoriaIP(int[] direccionIP){
+        if(direccionIP[0]<128){
+            return "La clase de "+toString()+" es A";
+        }else if(direccionIP[0]<192){
+            return "La clase de "+toString()+" es B";
+        }else if(direccionIP[0]<224){
+            return "La clase de "+toString()+" es C";
+        }
+        return "";
+    }
+
+    public String toString(int[] direccionIP){
+        return Arrays.toString(direccionIP);
     }
 }
 
