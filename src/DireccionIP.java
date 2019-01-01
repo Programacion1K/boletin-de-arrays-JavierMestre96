@@ -19,12 +19,23 @@ public class DireccionIP {
     }
 
 
-
     public String getDireccionIPTexto(){
         return direccionIPTexto;
     }
 
-    private int[] direccionIPTextoEnArray(){
+    public String infoIP(){
+        String salida="";
+        salida+="Dirección IP: "+toString(direccionIP)+"\n";
+        salida+="¿Es dirección de red? "+esDireccionRed()+"\n";
+        salida+="Dirección red: "+direccionRed()+"\n";
+        salida+="Máscara de red: "+mascaraRed()+"\n";
+        salida+="Clase "+claseIP();
+
+        salida+="";
+        return salida;
+    }
+
+    public int[] direccionIPTextoEnArray(){
         String numero="";
         int numerosIP;
         int posicionIP=0;
@@ -40,19 +51,53 @@ public class DireccionIP {
         return direccionIP;
     }
 
-    public String categoriaIP(int[] direccionIP){
-        if(direccionIP[0]<128){
-            return "La clase de "+toString()+" es A";
-        }else if(direccionIP[0]<192){
-            return "La clase de "+toString()+" es B";
-        }else if(direccionIP[0]<224){
-            return "La clase de "+toString()+" es C";
+    public String mascaraRed(){ ;
+        if(claseIP()=='A'){
+            return "255.0.0.0";
+        }
+        if(claseIP()=='B'){
+            return "255.255.0.0";
+        }
+        if(claseIP()=='C'){
+            return "255.255.255.0";
         }
         return "";
     }
 
+
+    public String direccionRed(){ ;
+        if(claseIP()=='A'){
+            return direccionIP[0]+".0.0.0";
+        }
+        if(claseIP()=='B'){
+            return direccionIP[0]+"."+direccionIP[1]+".0.0";
+        }
+        if(claseIP()=='C'){
+            return direccionIP[0]+"."+direccionIP[1]+"."+direccionIP[2]+".0";
+        }
+        return "";
+    }
+
+    public char claseIP(){
+        if(direccionIP[0]<128){
+            return 'A';
+        }else if(direccionIP[0]<192){
+            return 'B';
+        }else if(direccionIP[0]<224){
+            return 'C';
+        }
+        return 'n';
+    }
+
+    public boolean esDireccionRed(){
+        if(direccionIP[3]==0){
+            return true;
+        }
+        return false;
+    }
+
     public String toString(int[] direccionIP){
-        return Arrays.toString(direccionIP);
+        return direccionIP[0]+"."+direccionIP[1]+"."+direccionIP[2]+"."+direccionIP[3];
     }
 }
 
