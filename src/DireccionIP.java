@@ -24,16 +24,15 @@ public class DireccionIP {
     public String getDireccionIPTexto(){
         return direccionIPTexto;
     }
-
+// Método que muestra la información completa de una dirección IP
     public String infoIP(){
         String salida="";
         salida+="Dirección IP: "+toString()+"\n";
         salida+="¿Es dirección de red? "+esDireccionRed(direccionIP)+"\n";
-        salida+="Dirección red: "+direccionRed(direccionIP)+"\n";
-        salida+="Máscara de red: "+mascaraRed(direccionIP)+"\n";
+        salida+="Dirección red: "+direccionRed()+"\n";
+        salida+="Máscara de red: "+mascaraRed()+"\n";
         salida+="Clase "+claseIP();
-
-        salida+="";
+        salida+="\n"+esPublica();
         return salida;
     }
 
@@ -53,7 +52,8 @@ public class DireccionIP {
         return direccionIP;
     }
 
-    private String mascaraRed(int[] direccionIP){ ;
+    // Método que saca la máscara de red de una dirección IP
+    private String mascaraRed(){ ;
         if(claseIP()=='A'){
             return "255.0.0.0";
         }
@@ -66,7 +66,8 @@ public class DireccionIP {
         return "";
     }
 
-    private String direccionRed(int[] direccionIP){ ;
+    // Método que saca la dirección de red de una dirección IP
+    private String direccionRed(){ ;
         if(claseIP()=='A'){
             return direccionIP[0]+".0.0.0";
         }
@@ -79,6 +80,7 @@ public class DireccionIP {
         return "";
     }
 
+    // Método para sacar a que clase pertenece una dirección IP
     private char claseIP(){
         if(direccionIP[0]<128){
             return 'A';
@@ -90,6 +92,7 @@ public class DireccionIP {
         return 'n';
     }
 
+    // Método para comprobar si una dirección IP es una dirección de Red
     private boolean esDireccionRed(int[] direccionIP){
         if(direccionIP[3]==0){
             return true;
@@ -97,9 +100,28 @@ public class DireccionIP {
         return false;
     }
 
+    // Método para comprobar si una dirección IP es pública o si es privada
+    private String esPublica(){
+        if(claseIP() == 'A'){
+            if(direccionIP[0] < 11){
+                return "Es privada.";
+            }
+        }
+        if(claseIP() == 'B'){
+            if(direccionIP[0] == 172 && direccionIP[1] > 15 && direccionIP[1]<32){
+                return "Es privada";
+            }
+        }
+        if(claseIP() == 'C'){
+            if(direccionIP[0]==192 && direccionIP[1]==168){
+                return "Es privada";
+            }
+        }
+
+        return "Es pública";
+    }
 
     //Método que devuelva un array con n direcciones IP todas en la misma red (que se le pasa como argumento). N puede ser muy grande.
-
     public static String[] DireccionesIPEnMismaRed(DireccionIP direccionIPInicial, int numeroEquipos){
         String[] direccionesIPEnMismaRed=new String[numeroEquipos];
         for(int i=0; i<numeroEquipos;i++){
@@ -110,6 +132,7 @@ public class DireccionIP {
         }
         return direccionesIPEnMismaRed;
     }
+
     @Override
     public String toString(){
         return direccionIP[0]+"."+direccionIP[1]+"."+direccionIP[2]+"."+direccionIP[3];
