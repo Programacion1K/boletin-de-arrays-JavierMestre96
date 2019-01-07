@@ -7,7 +7,7 @@ public class DireccionIP {
     private String direccionIPTexto;
 
     public DireccionIP(String direccionIPTexto){
-        this.direccionIPTexto=direccionIPTexto;
+        this.direccionIP=direccionIPTextoEnArray(direccionIPTexto);
     }
 
     public DireccionIP(int[] direccionIP){
@@ -24,7 +24,8 @@ public class DireccionIP {
     public String getDireccionIPTexto(){
         return direccionIPTexto;
     }
-// Método que muestra la información completa de una dirección IP
+
+    // Método que muestra la información completa de una dirección IP
     public String infoIP(){
         String salida="";
         salida+="Dirección IP: "+toString()+"\n";
@@ -36,17 +37,16 @@ public class DireccionIP {
         return salida;
     }
 
-    public int[] direccionIPTextoEnArray(){
-        String numero="";
-        int numerosIP;
-        int posicionIP=0;
-        for(int i=0;i<direccionIPTexto.length();i++){
-            if(getDireccionIPTexto().charAt(i)!=',') {
-                numero += direccionIPTexto.charAt(i);
-            }else{
-                numerosIP=Integer.parseInt(numero);
-                direccionIP[posicionIP]=numerosIP;
-                posicionIP++;
+    //Método para pasar el String a Array
+    public int[] direccionIPTextoEnArray(String direccionIPEnTexto){
+        int[] direccionIP = new int[LONGITUD_IP];
+        // Pongo el límite en direccionIP.length-1 porque solo hay 3 puntos en la IP
+        for(int i=0;i<direccionIP.length-1;i++){
+            direccionIP[i]=Integer.parseInt(direccionIPEnTexto.substring(0,direccionIPEnTexto.indexOf('.')));
+            direccionIPEnTexto=direccionIPEnTexto.substring(direccionIPEnTexto.indexOf('.')+1,direccionIPEnTexto.length());
+            // Porque al no haber mas puntos que buscar, te muestra un -1 el indexOf.
+            if(direccionIPEnTexto.indexOf('.')==-1){
+                direccionIP[3]=Integer.parseInt(direccionIPEnTexto);
             }
         }
         return direccionIP;
@@ -82,7 +82,7 @@ public class DireccionIP {
 
     // Método para sacar a que clase pertenece una dirección IP
     private char claseIP(){
-        if(direccionIP[0]<128){
+        if(direccionIP[0]>=0 && direccionIP[0]<128){
             return 'A';
         }else if(direccionIP[0]<192){
             return 'B';
@@ -117,8 +117,22 @@ public class DireccionIP {
                 return "Es privada";
             }
         }
-
         return "Es pública";
+    }
+
+    // Método que compara dos direcciones IP y comprueba si estan en la misma red o no
+    public static String comparaDosDirecciones(DireccionIP ip1, DireccionIP ip2){
+        String direccionIP1=ip1.toString();
+        String direccionIP2=ip2.toString();
+        String[] bytesIP1 = direccionIP1.split(".");
+        if(ip1.claseIP()=='A' && ip2.claseIP()=='A'){
+            for(int i=0;i<direccionIP1.length();i++){
+
+            }
+        }
+        if(ip1.claseIP()=='A' && ip2.claseIP()=='B'){        }
+        if(ip1.claseIP()=='A' && ip2.claseIP()=='C'){        }
+       return direccionIP1;
     }
 
     //Método que devuelva un array con n direcciones IP todas en la misma red (que se le pasa como argumento). N puede ser muy grande.
@@ -126,8 +140,15 @@ public class DireccionIP {
         String[] direccionesIPEnMismaRed=new String[numeroEquipos];
         for(int i=0; i<numeroEquipos;i++){
             String direccionIP=direccionIPInicial.toString();
-            int numeroEquipo=Integer.parseInt(direccionIP.substring(direccionIP.length()-2))+i;
-            direccionIP=direccionIP.substring(0,direccionIP.length()-2);
+            int numeroEquipo=0;
+            // Este if/else sirve para diferenciar y cuadrar las IPs en el caso de que el último numero sea menor o mayor que 10
+            if(direccionIP.charAt(direccionIP.length()-2)!='.'){
+                numeroEquipo=Integer.parseInt(direccionIP.substring(direccionIP.length()-2))+i;
+                direccionIP=direccionIP.substring(0,direccionIP.length()-2);
+            }else{
+                numeroEquipo=Integer.parseInt(direccionIP.substring(direccionIP.length()-1))+i;
+                direccionIP=direccionIP.substring(0,direccionIP.length()-1);
+            }
             direccionesIPEnMismaRed[i]=direccionIP+numeroEquipo;
         }
         return direccionesIPEnMismaRed;
@@ -138,4 +159,3 @@ public class DireccionIP {
         return direccionIP[0]+"."+direccionIP[1]+"."+direccionIP[2]+"."+direccionIP[3];
     }
 }
-
