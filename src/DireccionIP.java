@@ -4,7 +4,6 @@ public class DireccionIP {
 
     public static final int LONGITUD_IP=4;
     private int[] direccionIP = new int[LONGITUD_IP];
-    private String direccionIPTexto;
 
     public DireccionIP(String direccionIPTexto){
         this.direccionIP=direccionIPTextoEnArray(direccionIPTexto);
@@ -19,10 +18,6 @@ public class DireccionIP {
         direccionIP[1]=segundoNumeroIP;
         direccionIP[2]=tercerNumeroIP;
         direccionIP[3]=cuartoNumeroIP;
-    }
-
-    public String getDireccionIPTexto(){
-        return direccionIPTexto;
     }
 
     // Método que muestra la información completa de una dirección IP
@@ -49,7 +44,7 @@ public class DireccionIP {
                 direccionIP[3]=Integer.parseInt(direccionIPEnTexto);
             }
         }
-        return direccionIP;
+       return direccionIP;
     }
 
     // Método que saca la máscara de red de una dirección IP
@@ -118,21 +113,6 @@ public class DireccionIP {
             }
         }
         return "Es pública";
-    }
-
-    // Método que compara dos direcciones IP y comprueba si estan en la misma red o no
-    public static String comparaDosDirecciones(DireccionIP ip1, DireccionIP ip2){
-        String direccionIP1=ip1.toString();
-        String direccionIP2=ip2.toString();
-        String[] bytesIP1 = direccionIP1.split(".");
-        if(ip1.claseIP()=='A' && ip2.claseIP()=='A'){
-            for(int i=0;i<direccionIP1.length();i++){
-
-            }
-        }
-        if(ip1.claseIP()=='A' && ip2.claseIP()=='B'){        }
-        if(ip1.claseIP()=='A' && ip2.claseIP()=='C'){        }
-       return direccionIP1;
     }
 
     //Método que devuelva un array con n direcciones IP todas en la misma red (que se le pasa como argumento). N puede ser muy grande.
