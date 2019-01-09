@@ -32,6 +32,11 @@ public class DireccionIP {
         return salida;
     }
 
+    public int[] getDireccionIP(){
+        this.direccionIP=direccionIP;
+        return direccionIP;
+    }
+
     //Método para pasar el String a Array
     public int[] direccionIPTextoEnArray(String direccionIPEnTexto){
         int[] direccionIP = new int[LONGITUD_IP];
@@ -50,13 +55,16 @@ public class DireccionIP {
     // Método que saca la máscara de red de una dirección IP
     private String mascaraRed(){ ;
         if(claseIP()=='A'){
-            return "255.0.0.0";
+            DireccionIP mascaraClaseA = new DireccionIP(255,0,0,0);
+            return mascaraClaseA.toString();
         }
         if(claseIP()=='B'){
-            return "255.255.0.0";
+            DireccionIP mascaraClaseB = new DireccionIP(255,255,0,0);
+            return mascaraClaseB.toString();
         }
         if(claseIP()=='C'){
-            return "255.255.255.0";
+            DireccionIP mascaraClaseC = new DireccionIP(255,255,255,0);
+            return mascaraClaseC.toString();
         }
         return "";
     }
@@ -64,13 +72,16 @@ public class DireccionIP {
     // Método que saca la dirección de red de una dirección IP
     private String direccionRed(){ ;
         if(claseIP()=='A'){
-            return direccionIP[0]+".0.0.0";
+            DireccionIP direccionRedClaseA= new DireccionIP(direccionIP[0],0,0,0);
+            return direccionRedClaseA.toString();
         }
         if(claseIP()=='B'){
-            return direccionIP[0]+"."+direccionIP[1]+".0.0";
+            DireccionIP direccionRedClaseB= new DireccionIP(direccionIP[0],direccionIP[1],0,0);
+            return direccionRedClaseB.toString();
         }
         if(claseIP()=='C'){
-            return direccionIP[0]+"."+direccionIP[1]+"."+direccionIP[2]+".0";
+            DireccionIP direccionRedClaseC= new DireccionIP(direccionIP[0],direccionIP[1],direccionIP[2],0);
+            return direccionRedClaseC.toString();
         }
         return "";
     }
@@ -114,6 +125,34 @@ public class DireccionIP {
         }
         return "Es pública";
     }
+
+    // Método que diga si dos IPs están en la misma red.
+    public static boolean estanEnLaMismaRed(DireccionIP ip1, DireccionIP ip2){
+        String direccionIP1=ip1.toString();
+        String direccionIP2=ip2.toString();
+        int octetoIP2=Integer.parseInt(direccionIP2.substring(0,direccionIP2.indexOf(".")));
+        int[] octetosIP1 = ip1.getDireccionIP();
+        int[] octetosIP2 = ip2.getDireccionIP();
+        if(ip1.claseIP()=='A' && ip2.claseIP()=='A'){
+            if(octetosIP1[0]==octetosIP1[0]){
+                return true;
+            }
+            if(ip1.claseIP()=='B' && ip2.claseIP()=='B'){
+                if(octetosIP1[0]==octetosIP1[0] && octetosIP1[1]==octetosIP2[1]){
+                    return true;
+                }
+            }
+        }
+        if(ip1.claseIP()=='C' && ip2.claseIP()=='C'){
+            if(octetosIP1[0]==octetosIP1[0] && octetosIP1[1]==octetosIP2[1] && octetosIP1[2]==octetosIP2[2]){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Método que diga si todas las IPs que se le pasan en un array pertenecen a la misma red.
+
 
     //Método que devuelva un array con n direcciones IP todas en la misma red (que se le pasa como argumento). N puede ser muy grande.
     public static String[] DireccionesIPEnMismaRed(DireccionIP direccionIPInicial, int numeroEquipos){
