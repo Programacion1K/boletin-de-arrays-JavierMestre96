@@ -128,47 +128,45 @@ public class DireccionIP {
 
     // Método que diga si dos IPs están en la misma red.
     public static boolean estanEnLaMismaRed(DireccionIP ip1, DireccionIP ip2){
-        String direccionIP1=ip1.toString();
-        String direccionIP2=ip2.toString();
-        int octetoIP2=Integer.parseInt(direccionIP2.substring(0,direccionIP2.indexOf(".")));
         int[] octetosIP1 = ip1.getDireccionIP();
         int[] octetosIP2 = ip2.getDireccionIP();
-        if(ip1.claseIP()=='A' && ip2.claseIP()=='A'){
-            if(octetosIP1[0]==octetosIP1[0]){
-                return true;
-            }
-            if(ip1.claseIP()=='B' && ip2.claseIP()=='B'){
-                if(octetosIP1[0]==octetosIP1[0] && octetosIP1[1]==octetosIP2[1]){
-                    return true;
-                }
-            }
-        }
-        if(ip1.claseIP()=='C' && ip2.claseIP()=='C'){
-            if(octetosIP1[0]==octetosIP1[0] && octetosIP1[1]==octetosIP2[1] && octetosIP1[2]==octetosIP2[2]){
-                return true;
-            }
+        if(ip1.direccionRed().equals(ip2.direccionRed())){
+            return true;
         }
         return false;
     }
 
     //Método que diga si todas las IPs que se le pasan en un array pertenecen a la misma red.
-
+    public static boolean todasLasIPSMismaRed(DireccionIP[] grupoIPs){
+        String redIPPrimera=grupoIPs[0].direccionRed();
+        for(int i = 0;i<grupoIPs.length;i++){
+            String redRestoIPs=grupoIPs[i].direccionRed();
+            if(!redIPPrimera.equals(redRestoIPs)){
+                return false;
+            }
+        }
+        return true;
+    }
 
     //Método que devuelva un array con n direcciones IP todas en la misma red (que se le pasa como argumento). N puede ser muy grande.
     public static String[] DireccionesIPEnMismaRed(DireccionIP direccionIPInicial, int numeroEquipos){
         String[] direccionesIPEnMismaRed=new String[numeroEquipos];
-        for(int i=0; i<numeroEquipos;i++){
-            String direccionIP=direccionIPInicial.toString();
-            int numeroEquipo=0;
+        for(int i=0; i<numeroEquipos;i++) {
+            String direccionIP = direccionIPInicial.toString();
+            int numeroEquipo = 0;
             // Este if/else sirve para diferenciar y cuadrar las IPs en el caso de que el último numero sea menor o mayor que 10
-            if(direccionIP.charAt(direccionIP.length()-2)!='.'){
-                numeroEquipo=Integer.parseInt(direccionIP.substring(direccionIP.length()-2))+i;
-                direccionIP=direccionIP.substring(0,direccionIP.length()-2);
-            }else{
-                numeroEquipo=Integer.parseInt(direccionIP.substring(direccionIP.length()-1))+i;
-                direccionIP=direccionIP.substring(0,direccionIP.length()-1);
-            }
-            direccionesIPEnMismaRed[i]=direccionIP+numeroEquipo;
+                if (direccionIPInicial.claseIP() == 'C') {
+                    if(numeroEquipo<255){
+                        if (direccionIP.charAt(direccionIP.length() - 2) != '.') {
+                            numeroEquipo = Integer.parseInt(direccionIP.substring(direccionIP.length() - 2)) + i;
+                            direccionIP = direccionIP.substring(0, direccionIP.length() - 2);
+                        } else {
+                            numeroEquipo = Integer.parseInt(direccionIP.substring(direccionIP.length() - 1)) + i;
+                            direccionIP = direccionIP.substring(0, direccionIP.length() - 1);
+                        }
+                    }
+                    direccionesIPEnMismaRed[i] = direccionIP + numeroEquipo;
+                }
         }
         return direccionesIPEnMismaRed;
     }
