@@ -100,7 +100,8 @@ public class DireccionIP {
 
     // Método para comprobar si una dirección IP es una dirección de Red
     private boolean esDireccionRed(int[] direccionIP){
-        if(direccionIP[3]==0){
+        DireccionIP ip = new DireccionIP(direccionIP);
+        if(ip.toString().equals(ip.direccionRed())){
             return true;
         }
         return false;
@@ -128,8 +129,6 @@ public class DireccionIP {
 
     // Método que diga si dos IPs están en la misma red.
     public static boolean estanEnLaMismaRed(DireccionIP ip1, DireccionIP ip2){
-        int[] octetosIP1 = ip1.getDireccionIP();
-        int[] octetosIP2 = ip2.getDireccionIP();
         if(ip1.direccionRed().equals(ip2.direccionRed())){
             return true;
         }
@@ -151,22 +150,18 @@ public class DireccionIP {
     //Método que devuelva un array con n direcciones IP todas en la misma red (que se le pasa como argumento). N puede ser muy grande.
     public static String[] DireccionesIPEnMismaRed(DireccionIP direccionIPInicial, int numeroEquipos){
         String[] direccionesIPEnMismaRed=new String[numeroEquipos];
+        int numeroEquipo = 0;
         for(int i=0; i<numeroEquipos;i++) {
             String direccionIP = direccionIPInicial.toString();
-            int numeroEquipo = 0;
             // Este if/else sirve para diferenciar y cuadrar las IPs en el caso de que el último numero sea menor o mayor que 10
-                if (direccionIPInicial.claseIP() == 'C') {
-                    if(numeroEquipo<255){
-                        if (direccionIP.charAt(direccionIP.length() - 2) != '.') {
-                            numeroEquipo = Integer.parseInt(direccionIP.substring(direccionIP.length() - 2)) + i;
-                            direccionIP = direccionIP.substring(0, direccionIP.length() - 2);
-                        } else {
-                            numeroEquipo = Integer.parseInt(direccionIP.substring(direccionIP.length() - 1)) + i;
-                            direccionIP = direccionIP.substring(0, direccionIP.length() - 1);
-                        }
-                    }
-                    direccionesIPEnMismaRed[i] = direccionIP + numeroEquipo;
+                if (direccionIP.charAt(direccionIP.length() - 2) != '.') {
+                    numeroEquipo = Integer.parseInt(direccionIP.substring(direccionIP.length() - 2)) + i + 1;
+                    direccionIP = direccionIP.substring(0, direccionIP.length() - 2);
+                } else {
+                    numeroEquipo = Integer.parseInt(direccionIP.substring(direccionIP.length() - 1)) + i + 1;
+                    direccionIP = direccionIP.substring(0, direccionIP.length() - 1);
                 }
+                direccionesIPEnMismaRed[i] = direccionIP + numeroEquipo;
         }
         return direccionesIPEnMismaRed;
     }
